@@ -1,1 +1,1 @@
-worker: bin/harcode run_worker
+worker: bin/hardcode run_worker
