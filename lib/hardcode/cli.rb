@@ -47,7 +47,7 @@ module Hardcode
         conn = Bunny.new
         conn.start
         ch = conn.create_channel
-        q = ch.queue('stack-encode')
+        q = ch.queue('stack-encode', durable: true)
         Dir.glob(File.join(source_dir, "*.*")) do |source_file|
           # wait until the file is fully written and not uploaded anymore
           while system %Q[lsof #{source_file}]
@@ -59,7 +59,7 @@ module Hardcode
               dest_dir: options[:destination]
             }.to_json,
             routing_key: q.name,
-            durable: true
+            persistent: true
           )
         end
       rescue => e
