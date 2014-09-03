@@ -57,7 +57,7 @@ module Hardcode
           while system %Q[lsof '#{source_file}']
            sleep 1
           end
-          FileUtils.mv(source_file, job[:tmp_dir], verbose: true)
+          FileUtils.mv(source_file, options[:tmp_dir], verbose: true)
           ch.default_exchange.publish(
             {
               source: File.join(options[:tmp_dir], File.basename(source_file)),
