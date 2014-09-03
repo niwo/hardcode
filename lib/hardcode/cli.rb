@@ -78,13 +78,17 @@ module Hardcode
     option :ampq_url,
       desc: "AMPQ URL",
       default: 'amqp://guest:guest@localhost:5672'
+    option :debug,
+      desc: "Enable debug output",
+      default: false
+    def start_worker
     def start_worker
       Sneakers.configure(
         amqp: options[:ampq_url],
         daemonize: false,
         log: STDOUT
       )
-      Sneakers.logger.level = Logger::INFO
+      Sneakers.logger.level = options[:debug] ? Logger::DEBUG : Logger::INFO
       r = Sneakers::Runner.new([ Hardcode::Worker ])
       r.run
     end
