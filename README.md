@@ -20,6 +20,20 @@ run `harcode help` for instructions
 
 ### Example: Enqueue Encoding Jobs to RabbitMQ
 
+Scan a directory for multimedia file, move them to the tmp directory and enqueue transcoding jobs if needed:
+
+```bash
+hardcode enqueue /home/media/import --destination /var/www/videos
+```
+
+### Example: Start the workers
+
+Starts the sneakers based workers which will wait for transcoding jobs coming from the RabbitMQ queue:
+
+´´´bash
+hardcode work --debug
+´´´
+
 ## Running the worker in production
 
 Put the following systemd configuration under /usr/lib/systemd/system/hardcode-worker.service (for RHEL/CentOS 7) and adapt it to your needs:
@@ -34,13 +48,20 @@ After=network.target
 Type=simple
 User=root
 Group=root
-ExecStart=hardcode work
+ExecStart=/usr/local/bin/hardcode work
 
 # Give a reasonable amount of time for the workers to start up/shut down
 TimeoutSec=300
 
 [Install]
 WantedBy=multi-user.target
+```
+
+Start the workers using systemd and enable it at boottime:
+
+```bash
+systemctl start hardcode-worker.service
+systemctl enable hardcode-worker.service
 ```
 
 ## Contributing
