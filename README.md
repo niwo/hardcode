@@ -22,7 +22,7 @@ run `harcode help` for instructions
 
 ## Running the worker in production
 
-Put the following systemd configuration under /usr/lib/systemd/system/hardcode.service (for RHEL/CentOS 7) and adapt it to your needs:
+Put the following systemd configuration under /usr/lib/systemd/system/hardcode-worker.service (for RHEL/CentOS 7) and adapt it to your needs:
 
 ```
 [Unit]
