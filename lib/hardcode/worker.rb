@@ -30,8 +30,9 @@ module Hardcode
           end
         end
       rescue => e
-        worker_trace e.backtrace
+        worker_trace "Error: #{e.backtrace}"
       end
+      worker_trace "Finished: #{job.to_s}"
       ack!
     end
 
