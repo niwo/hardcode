@@ -93,5 +93,43 @@ module Hardcode
       r.run
     end
 
+    desc "watch DIR", "Watch a source directory for new files, moves the files to tmp and enqueues transcoding jobs to rabbitmq"
+    option :destination,
+      desc: "destination directory",
+      aliases: '-d',
+      default: '/var/www/'
+    option :tmp_dir,
+      desc: "temporary directory",
+      aliases: '-t',
+      default: '/tmp'
+    def watch(source_dir)
+        FileUtils.touch LOCK_FILE
+        conn = Bunny.new
+        conn.start
+        ch = conn.create_channel
+        q = ch.queue('stack_encode', durable: true)
+        listener = Listen.to(source_dir) do |modified, added, removed|
+          unless added.empty?
+            source_file = added.first
+            # wait until the file is fully written and not uploaded anymore
+            while system %Q[lsof '#{source_file}']
+             sleep 1
+            end
+            FileUtils.mv(source_file, options[:tmp_dir], verbose: true)
+            ch.default_exchange.publish(
+              {
+                source: File.join(options[:tmp_dir], File.basename(source_file)),
+                dest_dir: options[:destination]
+              }.to_json,
+              routing_key: q.name,
+              persistent: true
+            )
+          end
+        end
+        listener.start
+        sleep
+      end
+    end
+
   end # class
 end # module
