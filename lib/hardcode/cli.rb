@@ -8,7 +8,7 @@ module Hardcode
 
   LOCK_FILE='/var/run/hardcode.lock'
 
-  class Cli
+  class Cli < Thor
     include Thor::Actions
 
     def self.exit_on_failure?
@@ -69,14 +69,17 @@ module Hardcode
       end
     end
 
+    desc "start_worker", "Start the sneakers based worker"
+    option :ampq_url,
+      desc: "AMPQ URL",
+      default: 'amqp://guest:guest@localhost:5672'
     def start_worker
       Sneakers.configure(
-        amqp: ENV['AMQP_URL'] || 'localhost',
+        amqp: options[:ampq_url],
         daemonize: false,
         log: STDOUT
       )
       Sneakers.logger.level = Logger::INFO
-
       r = Sneakers::Runner.new([ Hardcode::Worker ])
       r.run
     end
