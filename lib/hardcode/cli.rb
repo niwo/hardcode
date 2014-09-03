@@ -34,6 +34,10 @@ module Hardcode
       desc: "destination directory",
       aliases: '-d',
       default: '/var/www/'
+    option :tmp_dir,
+      desc: "temporary directory",
+      aliases: '-t',
+      default: '/tmp'
     def enqueue(source_dir)
       if File.exists? LOCK_FILE
         puts "Lockfile present: #{LOCK_FILE}"
@@ -47,15 +51,16 @@ module Hardcode
         conn = Bunny.new
         conn.start
         ch = conn.create_channel
-        q = ch.queue('stack-encode', durable: true)
+        q = ch.queue('stack_encode', durable: true)
         Dir.glob(File.join(source_dir, "*.*")) do |source_file|
           # wait until the file is fully written and not uploaded anymore
           while system %Q[lsof '#{source_file}']
            sleep 1
           end
+          FileUtils.mv(source_file, job[:tmp_dir], verbose: true)
           ch.default_exchange.publish(
             {
-              source: source_file,
+              source: File.join(options[:tmp_dir], File.basename(source_file)),
               dest_dir: options[:destination]
             }.to_json,
             routing_key: q.name,

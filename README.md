@@ -8,6 +8,11 @@ Install the gem:
 
     $ gem install hardcode
 
+## Dependencies
+
+- ruby >= 2.0
+- lsof
+
 ## Usage
 
 run `harcode help` for instructions
