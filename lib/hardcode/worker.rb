@@ -31,8 +31,6 @@ module Hardcode
         end
       rescue => e
         worker_trace e.backtrace
-        requeue!
-        exit 
       end
       ack!
     end
