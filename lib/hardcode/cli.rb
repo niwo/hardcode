@@ -5,6 +5,7 @@ module Hardcode
   require 'json'
   require 'logger'
   require 'sneakers/runner'
+  require 'listen'
 
   LOCK_FILE='/var/run/hardcode.lock'
 
