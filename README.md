@@ -1,6 +1,6 @@
 # Hardcode
 
-(stack-encode)[https://github.com/swisstxt/stack-encode] on steroids (using a rabbitmq worker queue)
+[stack-encode](https://github.com/swisstxt/stack-encode) on steroids (using a rabbitmq worker queue)
 
 ## Installation
 
