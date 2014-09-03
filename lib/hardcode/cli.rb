@@ -85,7 +85,8 @@ module Hardcode
       Sneakers.configure(
         amqp: options[:ampq_url],
         daemonize: false,
-        log: STDOUT
+        log: STDOUT,
+        metrics: Sneakers::Metrics::LoggingMetrics.new
       )
       Sneakers.logger.level = options[:debug] ? Logger::DEBUG : Logger::INFO
       r = Sneakers::Runner.new([ Hardcode::Worker ])

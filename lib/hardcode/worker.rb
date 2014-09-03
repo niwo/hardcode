@@ -8,10 +8,8 @@ module Hardcode
 
   class Worker
     include Sneakers::Worker
-    from_queue :stack_encode,
+    from_queue 'stack_encode',
       timeout_job_after: 600
-
-    Sneakers.configure metrics: Sneakers::Metrics::LoggingMetrics.new
 
     def work(msg)
       begin
