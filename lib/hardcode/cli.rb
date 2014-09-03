@@ -50,7 +50,7 @@ module Hardcode
         q = ch.queue('stack-encode', durable: true)
         Dir.glob(File.join(source_dir, "*.*")) do |source_file|
           # wait until the file is fully written and not uploaded anymore
-          while system %Q[lsof #{source_file}]
+          while system %Q[lsof '#{source_file}']
            sleep 1
           end
           ch.default_exchange.publish(
