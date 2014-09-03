@@ -30,9 +30,9 @@ hardcode enqueue /home/media/import --destination /var/www/videos
 
 Starts the sneakers based workers which will wait for transcoding jobs coming from the RabbitMQ queue:
 
-´´´bash
+```bash
 hardcode work --debug
-´´´
+```
 
 ## Running the worker in production
 
