@@ -82,7 +82,6 @@ module Hardcode
       desc: "Enable debug output",
       default: false
     def start_worker
-    def start_worker
       Sneakers.configure(
         amqp: options[:ampq_url],
         daemonize: false,
