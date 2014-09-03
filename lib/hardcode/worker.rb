@@ -4,7 +4,7 @@ module Hardcode
   require 'json'
   require 'fileutils'
 
-  LOG='/var/log/hardcode.log'
+  STACK_ENCODE_LOG='/var/log/hardcode.log'
 
   class Worker
     include Sneakers::Worker
@@ -18,7 +18,7 @@ module Hardcode
         if File.extname(source_file).match("^\.(mp4|mp3)$") != nil
           FileUtils.mv(source_file, job['dest_dir'], verbose: true)
         else
-          puts output = %x[stack-encode encode --no-progress -l #{LOG} '#{source_file}']
+          puts output = %x[stack-encode encode --no-progress -l #{STACK_ENCODE_LOG} '#{source_file}']
           if $?.success?
             puts filename = output[/.*>\s(.*)$/, 1]
             puts "Transcoding successful, deleting source file."

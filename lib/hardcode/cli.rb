@@ -29,7 +29,7 @@ module Hardcode
       say "hardcode v#{Hardcode::VERSION}"
     end
 
-    desc "enqueue SOURCE_DIRECTORY", "Scans a source directory and enqueues transcoding jobs to rabbitmq"
+    desc "enqueue DIR", "Scans a source directory, moves the files to tmp and enqueues transcoding jobs to rabbitmq"
     option :destination,
       desc: "destination directory",
       aliases: '-d',
@@ -74,14 +74,14 @@ module Hardcode
       end
     end
 
-    desc "start_worker", "Start the sneakers based worker"
+    desc "work", "Start the sneakers based workers"
     option :ampq_url,
       desc: "AMPQ URL",
       default: 'amqp://guest:guest@localhost:5672'
     option :debug,
       desc: "Enable debug output",
-      default: false
-    def start_worker
+      type: :boolean
+    def work
       Sneakers.configure(
         amqp: options[:ampq_url],
         daemonize: false,
