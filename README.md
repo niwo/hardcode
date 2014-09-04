@@ -43,6 +43,7 @@ Put the following systemd configuration under /usr/lib/systemd/system/hardcode-w
 Description=Hardcode Worker
 After=syslog.target
 After=network.target
+After=rabbitmq-server.target
 
 [Service]
 Type=simple

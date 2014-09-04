@@ -110,8 +110,7 @@ module Hardcode
       ch = conn.create_channel
       q = ch.queue('stack_encode', durable: true)
       listener = Listen.to(source_dir) do |modified, added, removed|
-        unless added.empty?
-          source_file = added.first
+        added.each do |source_file|
           # wait until the file is fully written and not uploaded anymore
           while system %Q[lsof '#{source_file}']
            sleep 1
