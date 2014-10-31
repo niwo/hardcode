@@ -20,7 +20,7 @@ run `harcode help` for instructions
 
 ### Example: Enqueue Encoding Jobs to RabbitMQ
 
-Scan a directory for multimedia file, move them to the tmp directory and enqueue transcoding jobs if needed:
+Scan a directory for multimedia files, move them to the tmp directory and enqueue transcoding jobs if needed:
 
 ```bash
 hardcode enqueue /home/media/import --destination /var/www/videos
