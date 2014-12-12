@@ -25,17 +25,21 @@ module Hardcode
     package_name "hardcode"
     map %w(-v --version) => :version
 
+    class_option :amqp_url,
+      desc: "AMQP URL",
+      default: ENV['AMQP_URL'] ||'amqp://guest:guest@localhost:5672'
+
     desc "version", "Outputs the version number"
     def version
       say "hardcode v#{Hardcode::VERSION}"
     end
 
     desc "enqueue DIR", "Scans a source directory, moves the files to tmp and enqueues transcoding jobs to rabbitmq"
-    option :destination,
+    method_option :destination,
       desc: "destination directory",
       aliases: '-d',
       default: '/var/www/'
-    option :tmp_dir,
+    method_option :tmp_dir,
       desc: "temporary directory",
       aliases: '-t',
       default: '/tmp'
@@ -49,7 +53,7 @@ module Hardcode
 
       begin
         FileUtils.touch LOCK_FILE
-        conn = Bunny.new
+        conn = Bunny.new(options[:amqp_url])
         conn.start
         ch = conn.create_channel
         q = ch.queue('stack_encode', durable: true)
@@ -76,15 +80,12 @@ module Hardcode
     end
 
     desc "work", "Start the sneakers based workers"
-    option :ampq_url,
-      desc: "AMPQ URL",
-      default: 'amqp://guest:guest@localhost:5672'
-    option :debug,
+    method_option :debug,
       desc: "Enable debug output",
       type: :boolean
     def work
       Sneakers.configure(
-        amqp: options[:ampq_url],
+        amqp: options[:amqp_url],
         daemonize: false,
         log: STDOUT,
         metrics: Sneakers::Metrics::LoggingMetrics.new
@@ -95,17 +96,17 @@ module Hardcode
     end
 
     desc "watch DIR", "Watch a source directory for new files, moves the files to tmp and enqueues transcoding jobs to rabbitmq"
-    option :destination,
+    method_option :destination,
       desc: "destination directory",
       aliases: '-d',
       default: '/var/www/'
-    option :tmp_dir,
+    method_option :tmp_dir,
       desc: "temporary directory",
       aliases: '-t',
       default: '/tmp'
     def watch(source_dir)
       FileUtils.touch LOCK_FILE
-      conn = Bunny.new
+      conn = Bunny.new(options[:amqp_url])
       conn.start
       ch = conn.create_channel
       q = ch.queue('stack_encode', durable: true)
