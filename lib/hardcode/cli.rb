@@ -83,9 +83,13 @@ module Hardcode
     method_option :debug,
       desc: "Enable debug output",
       type: :boolean
+    method_option :amqp_vhost,
+      desc: "AMQP VHOST",
+      default: ENV['AMQP_VHOST'] ||'/'
     def work
       Sneakers.configure(
         amqp: options[:amqp_url],
+        vhost: options[:amqp_vhost],
         daemonize: false,
         log: STDOUT,
         metrics: Sneakers::Metrics::LoggingMetrics.new
