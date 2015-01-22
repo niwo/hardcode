@@ -18,12 +18,12 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "thor"
-  spec.add_dependency "sneakers"
+  spec.add_dependency "thor", ">= 0.19.1"
+  spec.add_dependency "sneakers", ">= 1.0.1"
   spec.add_dependency "bunny", ">= 0.9.1"
-  spec.add_dependency "json"
-  spec.add_dependency "listen"
-  spec.add_dependency "stack-encode"
+  spec.add_dependency "json", ">= 1.8.2"
+  spec.add_dependency "listen", ">= 2.8.5"
+  spec.add_dependency "stack-encode", ">= 0.1.0"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
