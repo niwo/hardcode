@@ -46,7 +46,8 @@ After=network.target
 After=rabbitmq-server.target
 
 [Service]
-Type=simple
+EnvironmentFile=-/etc/sysconfig/hardcode
+Type=forking
 User=root
 Group=root
 ExecStart=/usr/local/bin/hardcode work
