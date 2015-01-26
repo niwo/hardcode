@@ -15,10 +15,11 @@ module Hardcode
       begin
         job = JSON.parse(msg)
         source_file = job['source']
+        ffmpeg_options = "--ffmpeg-options \"#{job['ffmpeg_options']}\"" if job['ffmpeg_options']
         if File.extname(source_file).match("^\.(mp4|mp3)$") != nil
           FileUtils.mv(source_file, job['dest_dir'], verbose: true)
         else
-          puts output = %x[stack-encode encode --no-progress -l #{STACK_ENCODE_LOG} '#{source_file}']
+          puts output = %x[stack-encode encode --no-progress -l #{STACK_ENCODE_LOG} #{ffmpeg_options} '#{source_file}']
           if $?.success?
             puts filename = output[/.*>\s(.*)$/, 1]
             puts "Transcoding successful, deleting source file."

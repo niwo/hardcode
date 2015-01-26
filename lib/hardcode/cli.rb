@@ -27,6 +27,7 @@ module Hardcode
 
     class_option :amqp_url,
       desc: "AMQP URL",
+      aliases: '-u',
       default: ENV['AMQP_URL'] ||'amqp://guest:guest@localhost:5672'
 
     desc "version", "Outputs the version number"
@@ -105,6 +106,9 @@ module Hardcode
       desc: "temporary directory",
       aliases: '-t',
       default: '/tmp'
+    method_option :ffmpeg_options,
+      desc: "custom ffmpeg options",
+      aliases: '-o'
     def watch(source_dir)
       FileUtils.touch LOCK_FILE
       conn = Bunny.new(options[:amqp_url])
@@ -117,12 +121,14 @@ module Hardcode
           while system %Q[lsof '#{source_file}']
            sleep 1
           end
+          worker_options = {
+            source: File.join(options[:tmp_dir], File.basename(source_file)),
+            dest_dir: options[:destination]
+          }
+          worker_options[:ffmpeg_options] = options[:ffmpeg_options] if options[:ffmpeg_options]
           FileUtils.mv(source_file, options[:tmp_dir], verbose: true)
           ch.default_exchange.publish(
-            {
-              source: File.join(options[:tmp_dir], File.basename(source_file)),
-              dest_dir: options[:destination]
-            }.to_json,
+            worker_options.to_json,
             routing_key: q.name,
             persistent: true
           )
