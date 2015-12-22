@@ -14,11 +14,16 @@ module Hardcode
       begin
         job = JSON.parse(msg)
         source_file = job['source']
-        ffmpeg_options = "--ffmpeg-options \"#{job['ffmpeg_options']}\"" if job['ffmpeg_options']
+        ffmpeg_options = if job['ffmpeg_options']
+          "--ffmpeg-options \"#{job['ffmpeg_options']}\""
+        else
+          ""
+        end
+        # move mp4 and mp3 file directly without encoding
         if File.extname(source_file).match("^\.(mp4|mp3)$") != nil
           FileUtils.mv(source_file, job['dest_dir'], verbose: true)
         else
-          output = %x[stack-encode encode --no-progress -l #{STACK_ENCODE_LOG} #{ffmpeg_options} '#{source_file}']
+        puts output = %x[stack-encode encode --no-progress --log-file #{STACK_ENCODE_LOG} #{ffmpeg_options} '#{source_file}']
           if $?.success?
             filename = output[/.*>\s(.*)$/, 1]
             logger.info "Transcoding successful, deleting source file."
@@ -29,7 +34,7 @@ module Hardcode
           end
         end
       rescue => e
-        message = "Error: #{e.backtrace}"
+        message = "Error: #{e.message} - #{e.backtrace}"
         logger.fatal message
         raise message
       end

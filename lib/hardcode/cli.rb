@@ -88,6 +88,8 @@ module Hardcode
       vhost = vhost_from_amqp_url(options[:amqp_url])
       Sneakers.configure(
         amqp: options[:amqp_url],
+        workers: 2,
+        threads: 1,
         vhost: vhost,
         daemonize: false,
         log: STDOUT,
