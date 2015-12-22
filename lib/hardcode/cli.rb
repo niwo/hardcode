@@ -94,6 +94,7 @@ module Hardcode
         metrics: Sneakers::Metrics::LoggingMetrics.new
       )
       Sneakers.logger.level = options[:debug] ? Logger::DEBUG : Logger::INFO
+      Sneakers::Worker.configure_logger(Logger.new STDOUT)
       Sneakers::Runner.new([ Hardcode::Worker ]).run
     end
 
