@@ -8,8 +8,7 @@ module Hardcode
 
   class Worker
     include Sneakers::Worker
-    from_queue 'stack_encode',
-      timeout_job_after: 600
+    from_queue 'stack_encode'
 
     def work(msg)
       begin
