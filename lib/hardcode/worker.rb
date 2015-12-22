@@ -18,21 +18,22 @@ module Hardcode
         if File.extname(source_file).match("^\.(mp4|mp3)$") != nil
           FileUtils.mv(source_file, job['dest_dir'], verbose: true)
         else
-          puts output = %x[stack-encode encode --no-progress -l #{STACK_ENCODE_LOG} #{ffmpeg_options} '#{source_file}']
+          output = %x[stack-encode encode --no-progress -l #{STACK_ENCODE_LOG} #{ffmpeg_options} '#{source_file}']
           if $?.success?
-            puts filename = output[/.*>\s(.*)$/, 1]
-            puts "Transcoding successful, deleting source file."
+            filename = output[/.*>\s(.*)$/, 1]
+            logger.info "Transcoding successful, deleting source file."
             FileUtils.mv(File.join(File.dirname(source_file), filename), job['dest_dir'], verbose: true)
             FileUtils.rm(source_file, verbose: true)
           else
-            puts "Error: Transcoding failed."
+            logger.error "Error: Transcoding failed."
           end
         end
       rescue => e
-        worker_trace message = "Error: #{e.backtrace}"
+        message = "Error: #{e.backtrace}"
+        logger.fatal message
         raise message
       end
-      worker_trace "Finished: #{job.to_s}"
+      logger.info "Finished: #{job.to_s}"
       ack!
     end
 
