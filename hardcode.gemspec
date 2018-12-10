@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["niwo"]
   spec.email         = ["nik.wolfgramm@gmail.com"]
   spec.summary       = %q{stack-encode on steroids (using a rabbitmq worker queue)}
-  spec.description   = %q{stack-encode on steroids (using a rabbitmq worker queue)}
+  spec.description   = %q{stack-encode on steroids - distributed video encoding using ffmpeg workers and queues on rabbitmq} -
   spec.homepage      = "https://github.com/niwo/hardcode"
   spec.license       = "MIT"
 
