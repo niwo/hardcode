@@ -18,7 +18,7 @@ Install the gem:
 
 run `harcode help` for instructions
 
-### Example: Enqueue Encoding Jobs to RabbitMQ
+### Example: Enqueue Encoding Jobs in RabbitMQ
 
 Scan a directory for multimedia files, move them to the tmp directory and enqueue transcoding jobs if needed:
 
@@ -26,7 +26,7 @@ Scan a directory for multimedia files, move them to the tmp directory and enqueu
 hardcode enqueue /home/media/import --destination /var/www/videos
 ```
 
-### Example: Start the workers
+### Example: Start workers
 
 Starts the sneakers based workers which will wait for transcoding jobs coming from the RabbitMQ queue:
 
@@ -34,7 +34,7 @@ Starts the sneakers based workers which will wait for transcoding jobs coming fr
 hardcode work --debug
 ```
 
-## Running the worker in production
+## Running worker in production
 
 Put the following systemd configuration under /usr/lib/systemd/system/hardcode-worker.service (for RHEL/CentOS 7) and adapt it to your needs:
 
@@ -59,7 +59,7 @@ TimeoutSec=300
 WantedBy=multi-user.target
 ```
 
-Start the workers using systemd and enable it at boottime:
+Start workers using systemd and enable it at boottime:
 
 ```bash
 systemctl start hardcode-worker.service
