@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["nik.wolfgramm@gmail.com"]
   spec.summary       = %q{stack-encode on steroids (using a rabbitmq worker queue)}
   spec.description   = %q{stack-encode on steroids (using a rabbitmq worker queue)}
-  spec.homepage      = "https://github.com/swisstxt/hardcode"
+  spec.homepage      = "https://github.com/niwo/hardcode"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
